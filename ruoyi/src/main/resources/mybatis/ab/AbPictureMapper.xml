@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.ab.mapper.AbPictureMapper">
+    
+    <resultMap type="AbPicture" id="AbPictureResult">
+        <result property="id"    column="id"    />
+        <result property="imgUrl"    column="img_url"    />
+        <result property="atlasId"    column="atlas_id"    />
+        <result property="blockNum"    column="block_num"    />
+        <result property="name"    column="name"    />
+        <result property="chooseArray"    column="choose_array"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+    </resultMap>
+
+    <sql id="selectAbPictureVo">
+        select id, img_url, atlas_id, block_num, name, choose_array, status, del_flag, create_time, create_by, update_time, update_by from ab_picture
+    </sql>
+
+    <select id="selectAbPictureList" parameterType="AbPicture" resultMap="AbPictureResult">
+        <include refid="selectAbPictureVo"/>
+        <where>  
+            <if test="atlasId != null "> and atlas_id = #{atlasId}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectAbPictureById" parameterType="Long" resultMap="AbPictureResult">
+        <include refid="selectAbPictureVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAbPicture" parameterType="AbPicture" useGeneratedKeys="true" keyProperty="id">
+        insert into ab_picture
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="imgUrl != null  and imgUrl != ''">img_url,</if>
+            <if test="atlasId != null ">atlas_id,</if>
+            <if test="blockNum != null ">block_num,</if>
+            <if test="name != null  and name != ''">name,</if>
+            <if test="chooseArray != null  and chooseArray != ''">choose_array,</if>
+            <if test="status != null ">status,</if>
+            <if test="delFlag != null ">del_flag,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="imgUrl != null  and imgUrl != ''">#{imgUrl},</if>
+            <if test="atlasId != null ">#{atlasId},</if>
+            <if test="blockNum != null ">#{blockNum},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="chooseArray != null  and chooseArray != ''">#{chooseArray},</if>
+            <if test="status != null ">#{status},</if>
+            <if test="delFlag != null ">#{delFlag},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAbPicture" parameterType="AbPicture">
+        update ab_picture
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="imgUrl != null  and imgUrl != ''">img_url = #{imgUrl},</if>
+            <if test="atlasId != null ">atlas_id = #{atlasId},</if>
+            <if test="blockNum != null ">block_num = #{blockNum},</if>
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="chooseArray != null  and chooseArray != ''">choose_array = #{chooseArray},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="delFlag != null ">del_flag = #{delFlag},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAbPictureById" parameterType="Long">
+        delete from ab_picture where id = #{id}
+    </delete>
+
+    <delete id="deleteAbPictureByIds" parameterType="String">
+        delete from ab_picture where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

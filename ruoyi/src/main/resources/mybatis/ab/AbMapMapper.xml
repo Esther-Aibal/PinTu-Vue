@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.ab.mapper.AbMapMapper">
+    
+    <resultMap type="AbMap" id="AbMapResult">
+        <result property="id"    column="id"    />
+        <result property="imgUrl"    column="img_url"    />
+        <result property="name"    column="name"    />
+        <result property="type"    column="type"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+    </resultMap>
+
+    <sql id="selectAbMapVo">
+        select id, img_url, name, type, status, del_flag, create_time, create_by, update_time, update_by from ab_map
+    </sql>
+
+    <select id="selectAbMapList" parameterType="AbMap" resultMap="AbMapResult">
+        <include refid="selectAbMapVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="type != null "> and type = #{type}</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectAbMapById" parameterType="String" resultMap="AbMapResult">
+        <include refid="selectAbMapVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAbMap" parameterType="AbMap">
+        insert into ab_map
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="imgUrl != null  and imgUrl != ''">img_url,</if>
+            <if test="name != null  and name != ''">name,</if>
+            <if test="type != null ">type,</if>
+            <if test="status != null ">status,</if>
+            <if test="delFlag != null ">del_flag,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="imgUrl != null  and imgUrl != ''">#{imgUrl},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="type != null ">#{type},</if>
+            <if test="status != null ">#{status},</if>
+            <if test="delFlag != null ">#{delFlag},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAbMap" parameterType="AbMap">
+        update ab_map
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="imgUrl != null  and imgUrl != ''">img_url = #{imgUrl},</if>
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="type != null ">type = #{type},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="delFlag != null ">del_flag = #{delFlag},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAbMapById" parameterType="String">
+        delete from ab_map where id = #{id}
+    </delete>
+
+    <delete id="deleteAbMapByIds" parameterType="String">
+        delete from ab_map where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
