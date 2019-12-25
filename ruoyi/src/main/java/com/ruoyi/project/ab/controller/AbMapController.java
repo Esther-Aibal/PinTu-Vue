@@ -47,6 +47,15 @@ public class AbMapController extends BaseController
         return getDataTable(list);
     }
 
+    @PreAuthorize("@ss.hasPermi('ab:map:list')")
+    @GetMapping("/all")
+    public AjaxResult all()
+    {
+        AbMap abMap = new AbMap();
+        List<AbMap> list = abMapService.selectAbMapList(abMap);
+        return AjaxResult.success(list);
+    }
+
     /**
      * 导出地图菜单列表
      */

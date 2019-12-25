@@ -1,30 +1,27 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-      <el-form-item label="图集id" prop="mapId">
-        <el-input
-          v-model="queryParams.mapId"
-          placeholder="请输入图集id"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="${column.columnComment}" prop="name">
+      <el-form-item label="图集名称" prop="name">
         <el-input
           v-model="queryParams.name"
-          placeholder="请输入${column.columnComment}"
+          placeholder="请输入图集名称"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-        <el-form-item label="${column.columnComment}" prop="status">
-        <el-select v-model="queryParams.status" placeholder="请选择${column.columnComment}" clearable size="small">
-          <el-option label="请选择字典生成" value="" />
+
+      <el-form-item label="所属地图" prop="mapId">
+        <el-select v-model="queryParams.mapId" placeholder="请选择地图" clearable size="small">
+          <el-option
+            v-for="map in mapOptions"
+            :key="map.id"
+            :label="map.name"
+            :value="map.name"
+          />
         </el-select>
       </el-form-item>
-      <el-form-item>
+        <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
@@ -97,7 +94,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -109,25 +106,34 @@
     <!-- 添加或修改图集对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="图片地址" prop="imgUrl">
-          <el-input v-model="form.imgUrl" placeholder="请输入图片地址" />
+        <el-form-item label="图集名称" prop="name">
+          <el-input v-model="form.name" placeholder="请输入图集名称" />
         </el-form-item>
-        <el-form-item label="图集id" prop="mapId">
-          <el-input v-model="form.mapId" placeholder="请输入图集id" />
-        </el-form-item>
-        <el-form-item label="图集id" prop="name">
-          <el-input v-model="form.name" placeholder="请输入图集id" />
-        </el-form-item>
-        <el-form-item label="图集id">
-          <el-radio-group v-model="form.status">
-            <el-radio label="1">请选择字典生成</el-radio>
+        <el-form-item label="地图" prop="mapId">
+          <el-radio-group v-model="form.mapId">
+            <el-radio
+              v-for="map in mapOptions"
+              :key="map.id"
+              :label="map.name"
+            >{{map.name}}</el-radio>
           </el-radio-group>
+        </el-form-item>
+        <el-form-item label="图片地址" prop="imgUrl">
+          <img v-bind:src="form.imgUrl" class="img-circle img-lg" />
+          <el-upload :show-file-list="false"
+                     :before-upload="beforeUpload"
+                     :action="uploadImgUrl"
+                     name="file"
+                     :headers="headers"
+                     :on-success="quillImgSuccess">
+            <el-button size="small">
+              上传
+              <i class="el-icon-upload el-icon--right"></i>
+            </el-button>
+          </el-upload>
         </el-form-item>
         <el-form-item label="图片总数" prop="total">
           <el-input v-model="form.total" placeholder="请输入图片总数" />
-        </el-form-item>
-        <el-form-item label="图片总数" prop="delFlag">
-          <el-input v-model="form.delFlag" placeholder="请输入图片总数" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -139,8 +145,8 @@
 </template>
 
 <script>
-import { listAtlas, getAtlas, delAtlas, addAtlas, updateAtlas, exportAtlas } from "@/api/ab/atlas";
-
+import { listAtlas, getAtlas, delAtlas, addAtlas, updateAtlas, exportAtlas,getMaps } from "@/api/ab/atlas";
+import { getToken } from '@/utils/auth'
 export default {
   data() {
     return {
@@ -174,11 +180,21 @@ export default {
       rules: {
         mapId: [
           { required: true, message: "图集id不能为空", trigger: "blur" }
-        ],      }
+        ],      },
+      mapOptions:[],
+      uploadImgUrl: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
+      headers: {
+        Authorization: 'Bearer ' + getToken()
+      }
     };
   },
   created() {
+
     this.getList();
+    getMaps().then(response => {
+      this.mapOptions =response.data;
+    });
+
   },
   methods: {
     /** 查询图集列表 */
@@ -298,7 +314,31 @@ export default {
         }).then(response => {
           this.download(response.msg);
         }).catch(function() {});
-    }
+    },
+    // 上传预处理
+    beforeUpload(file) {
+      if (file.type.indexOf("image/") == -1) {
+        this.msgError("文件格式错误，请上传图片类型,如：JPG，PNG后缀的文件。");
+      } else {
+        //const reader = new FileReader();
+        //reader.readAsDataURL(file);
+        //reader.onload = () => {
+        //  this.form.imgUrl = reader.result;
+        //};
+      }
+    },
+    quillImgSuccess(res, file) {
+      // res为图片服务器返回的数据
+      // 如果上传成功
+      if (res.code == 200) {
+        // 获取光标所在位置
+        // 插入图片  res.url为服务器返回的图片地址
+        this.form.imgUrl =res.url;
+
+      } else {
+        this.$message.error("图片插入失败");
+      }
+    },
   }
 };
 </script>

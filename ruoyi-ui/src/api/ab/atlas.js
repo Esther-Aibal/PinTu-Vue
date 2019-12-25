@@ -17,6 +17,17 @@ export function getAtlas(id) {
   })
 }
 
+// 查询图集详细
+export function getMaps() {
+  console.log("___===");
+  let s = request({
+              url: '/ab/map/all',
+              method: 'get'
+  })
+  console.log(s);
+  return s;
+}
+
 // 新增图集
 export function addAtlas(data) {
   return request({

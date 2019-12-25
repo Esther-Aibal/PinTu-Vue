@@ -79,10 +79,14 @@
 
     <el-table v-loading="loading" :data="mapList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="id" align="center" prop="id" />
       <el-table-column label="名称" align="center" prop="name" />
-      <el-table-column label="图集类型" align="center" prop="type" />
-      <el-table-column label="状态" align="center" prop="status" />
+      <el-table-column label="图片" align="center" prop="imgUrl" >
+        <template slot-scope="scope">
+          <img :src="scope.row.imgUrl" alt="" style="width: 50px;height: 50px">
+        </template>
+      </el-table-column>
+      <el-table-column label="图集类型" align="center" prop="type" :formatter="mapTypeFormat" />
+      <el-table-column label="状态" align="center" prop="status" :formatter="statusFormat" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -212,6 +216,14 @@ export default {
         this.total = response.total;
         this.loading = false;
       });
+    },
+    // 字典状态字典翻译
+    statusFormat(row, column) {
+      return this.selectDictLabel(this.abStatusOptions, row.status);
+    },
+    // 字典状态字典翻译
+    mapTypeFormat(row, column) {
+      return this.selectDictLabel(this.mapTypeOptions, row.status);
     },
     // 取消按钮
     cancel() {
