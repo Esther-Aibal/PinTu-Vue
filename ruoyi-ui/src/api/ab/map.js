@@ -16,6 +16,13 @@ export function getMap(id) {
     method: 'get'
   })
 }
+//审核
+export function review(id) {
+  return request({
+    url: '/ab/map/review?id='+id,
+    method: 'post'
+  })
+}
 
 // 新增地图菜单
 export function addMap(data) {

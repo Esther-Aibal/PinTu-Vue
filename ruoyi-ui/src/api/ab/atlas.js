@@ -19,13 +19,19 @@ export function getAtlas(id) {
 
 // 查询图集详细
 export function getMaps() {
-  console.log("___===");
   let s = request({
               url: '/ab/map/all',
               method: 'get'
   })
   console.log(s);
   return s;
+}
+//审核
+export function review(id) {
+  return request({
+    url: '/ab/atlas/review?id='+id,
+    method: 'post'
+  })
 }
 
 // 新增图集

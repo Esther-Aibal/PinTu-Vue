@@ -58,4 +58,6 @@ public interface IAbAtlasService
      * @return 结果
      */
     public int deleteAbAtlasById(String id);
+
+    public int review(String id);
 }

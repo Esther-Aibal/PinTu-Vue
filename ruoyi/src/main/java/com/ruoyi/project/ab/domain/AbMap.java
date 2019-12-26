@@ -27,14 +27,14 @@ public class AbMap extends BaseEntity
 
     /** 图集类型 0 汇总式 1展开式 */
     @Excel(name = "图集类型 0 汇总式 1展开式")
-    private Long type;
+    private Integer type;
 
     /** $column.columnComment */
-    @Excel(name = "图集类型 0 汇总式 1展开式")
-    private Long status;
+    @Excel(name = "状态")
+    private Integer status;
 
     /** $column.columnComment */
-    private Long delFlag;
+    private Integer delFlag;
 
     public void setId(String id) 
     {
@@ -63,32 +63,29 @@ public class AbMap extends BaseEntity
     {
         return name;
     }
-    public void setType(Long type) 
-    {
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
         this.type = type;
     }
 
-    public Long getType() 
-    {
-        return type;
+    public Integer getStatus() {
+        return status;
     }
-    public void setStatus(Long status) 
-    {
+
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
-    public Long getStatus() 
-    {
-        return status;
-    }
-    public void setDelFlag(Long delFlag) 
-    {
-        this.delFlag = delFlag;
+    public Integer getDelFlag() {
+        return delFlag;
     }
 
-    public Long getDelFlag() 
-    {
-        return delFlag;
+    public void setDelFlag(Integer delFlag) {
+        this.delFlag = delFlag;
     }
 
     @Override

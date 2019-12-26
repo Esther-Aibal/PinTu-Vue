@@ -25,6 +25,14 @@ export function addPicture(data) {
     data: data
   })
 }
+//审核
+export function review(id) {
+  return request({
+    url: '/ab/picture/review?id='+id,
+    method: 'post'
+  })
+}
+
 
 // 修改图片
 export function updatePicture(data) {
@@ -50,4 +58,15 @@ export function exportPicture(query) {
     method: 'get',
     params: query
   })
+}
+
+// 查询图集详细
+export function getAtlasList() {
+
+  let s = request({
+    url: '/ab/atlas/all',
+    method: 'get'
+  })
+  console.log(s);
+  return s;
 }

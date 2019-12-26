@@ -20,6 +20,17 @@
             :value="map.name"
           />
         </el-select>
+
+      </el-form-item>
+      <el-form-item label="状态" prop="status">
+        <el-select v-model="queryParams.status" placeholder="请选择状态" clearable size="small">
+          <el-option
+            v-for="dict in abStatusOptions"
+            :key="dict.dictValue"
+            :label="dict.dictLabel"
+            :value="dict.dictValue"
+          />
+        </el-select>
       </el-form-item>
         <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -70,11 +81,10 @@
 
     <el-table v-loading="loading" :data="atlasList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="${column.columnComment}" align="center" prop="id" />
-      <el-table-column label="图集id" align="center" prop="mapId" />
-      <el-table-column label="${column.columnComment}" align="center" prop="name" />
-      <el-table-column label="${column.columnComment}" align="center" prop="status" />
+      <el-table-column label="所属地图" align="center" prop="mapId" :formatter="mapFormat"/>
+      <el-table-column label="图集名称" align="center" prop="name"  />
       <el-table-column label="图片总数" align="center" prop="total" />
+      <el-table-column label="状态" align="center" prop="status" :formatter="statusFormat"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -91,6 +101,13 @@
             @click="handleDelete(scope.row)"
             v-hasPermi="['ab:atlas:remove']"
           >删除</el-button>
+          <el-button v-show="scope.row.status ==0"
+                     size="mini"
+                     type="text"
+                     icon="el-icon-view"
+                     @click="handleReview(scope.row)"
+                     v-hasPermi="['ab:picture:edit']"
+          >审核</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -114,7 +131,7 @@
             <el-radio
               v-for="map in mapOptions"
               :key="map.id"
-              :label="map.name"
+              :label="map.id"
             >{{map.name}}</el-radio>
           </el-radio-group>
         </el-form-item>
@@ -145,7 +162,7 @@
 </template>
 
 <script>
-import { listAtlas, getAtlas, delAtlas, addAtlas, updateAtlas, exportAtlas,getMaps } from "@/api/ab/atlas";
+import { listAtlas, getAtlas, delAtlas, addAtlas,review, updateAtlas, exportAtlas,getMaps } from "@/api/ab/atlas";
 import { getToken } from '@/utils/auth'
 export default {
   data() {
@@ -180,8 +197,19 @@ export default {
       rules: {
         mapId: [
           { required: true, message: "图集id不能为空", trigger: "blur" }
-        ],      },
+        ],
+        name: [
+          { required: true, message: "名称不能为空", trigger: "blur" }
+        ],
+        total: [
+          { required: true, message: "总数不能为空", trigger: "blur" }
+        ],
+        type: [
+          { required: true, message: "所属地图不能为空", trigger: "blur" }
+        ],
+      },
       mapOptions:[],
+      abStatusOptions:[],
       uploadImgUrl: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
       headers: {
         Authorization: 'Bearer ' + getToken()
@@ -193,6 +221,9 @@ export default {
     this.getList();
     getMaps().then(response => {
       this.mapOptions =response.data;
+    });
+    this.getDicts("ab_status").then(response => {
+      this.abStatusOptions = response.data;
     });
 
   },
@@ -210,6 +241,24 @@ export default {
     cancel() {
       this.open = false;
       this.reset();
+    },
+    // 字典状态字典翻译
+    statusFormat(row, column) {
+      return this.selectDictLabel(this.abStatusOptions, row.status);
+    },
+    // 字典状态字典翻译
+    mapFormat(row, column) {
+      console.log(row.mapId);
+      var actions = [];
+      Object.keys(this.mapOptions).map((key) => {
+        console.log(this.mapOptions[key].id+"相同"+row.mapId);
+        if (this.mapOptions[key].id == ( row.mapId)) {
+          console.log("相同");
+          actions.push(this.mapOptions[key].name);
+          return actions.join('');
+        }
+      })
+      return actions.join('');
     },
     // 表单重置
     reset() {
@@ -301,6 +350,20 @@ export default {
           this.getList();
           this.msgSuccess("删除成功");
         }).catch(function() {});
+    },
+    /** 审核按钮操作 */
+    handleReview(row) {
+      const id = row.id;
+      this.$confirm('是否确认通过审核?', "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(function() {
+        return review(id);
+      }).then(() => {
+        this.getList();
+        this.msgSuccess("审核成功");
+      }).catch(function() {});
     },
     /** 导出按钮操作 */
     handleExport() {

@@ -93,4 +93,13 @@ public class AbAtlasServiceImpl implements IAbAtlasService
     {
         return abAtlasMapper.deleteAbAtlasById(id);
     }
+
+    @Override
+    public int review(String id) {
+        AbAtlas abAtlas = abAtlasMapper.selectAbAtlasById(id);
+        if(abAtlas.getStatus() ==0){
+            abAtlas.setStatus(1);
+        }
+        return abAtlasMapper.updateAbAtlas(abAtlas);
+    }
 }

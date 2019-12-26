@@ -27,7 +27,7 @@ public class AbPictureServiceImpl implements IAbPictureService
      * @return 图片
      */
     @Override
-    public AbPicture selectAbPictureById(Long id)
+    public AbPicture selectAbPictureById(String id)
     {
         return abPictureMapper.selectAbPictureById(id);
     }
@@ -92,5 +92,14 @@ public class AbPictureServiceImpl implements IAbPictureService
     public int deleteAbPictureById(Long id)
     {
         return abPictureMapper.deleteAbPictureById(id);
+    }
+
+    @Override
+    public int review(String id) {
+        AbPicture abPicture = abPictureMapper.selectAbPictureById(id);
+        if(abPicture.getStatus() ==0){
+            abPicture.setStatus(1);
+        }
+        return abPictureMapper.updateAbPicture(abPicture);
     }
 }

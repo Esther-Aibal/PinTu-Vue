@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.ab.mapper.AbUserAtlasMapper">
+    
+    <resultMap type="AbUserAtlas" id="AbUserAtlasResult">
+        <result property="userId"    column="user_id"    />
+        <result property="atlasId"    column="atlas_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="unlockedNum"    column="unlocked_num"    />
+    </resultMap>
+
+    <sql id="selectAbUserAtlasVo">
+        select user_id, atlas_id, create_time, unlocked_num from ab_user_atlas
+    </sql>
+
+    <select id="selectAbUserAtlasList" parameterType="AbUserAtlas" resultMap="AbUserAtlasResult">
+        <include refid="selectAbUserAtlasVo"/>
+        <where>  
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+        </where>
+    </select>
+
+    <select id="getAbUserAtlasListAboutUser" resultType="com.ruoyi.project.ab.domain.req.GameAtlas">
+        select au.unlocked_num unlockedNum,a.total,a.img_url imgUrl,a.id
+        from ab_atlas a
+        left join ab_user_atlas au on a.id=au.atlas_id and au.user_id =#{userId}
+        where a.map_id=#{mapId} and a.status = 1
+    </select>
+    
+    <select id="selectAbUserAtlasById" parameterType="String" resultMap="AbUserAtlasResult">
+        <include refid="selectAbUserAtlasVo"/>
+        where user_id = #{userId}
+    </select>
+        
+    <insert id="insertAbUserAtlas" parameterType="AbUserAtlas">
+        insert into ab_user_atlas
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null  and userId != ''">user_id,</if>
+            <if test="atlasId != null  and atlasId != ''">atlas_id,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="unlockedNum != null ">unlocked_num,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null  and userId != ''">#{userId},</if>
+            <if test="atlasId != null  and atlasId != ''">#{atlasId},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="unlockedNum != null ">#{unlockedNum},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAbUserAtlas" parameterType="AbUserAtlas">
+        update ab_user_atlas
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="atlasId != null  and atlasId != ''">atlas_id = #{atlasId},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="unlockedNum != null ">unlocked_num = #{unlockedNum},</if>
+        </trim>
+        where user_id = #{userId}
+    </update>
+
+    <delete id="deleteAbUserAtlasById" parameterType="String">
+        delete from ab_user_atlas where user_id = #{userId}
+    </delete>
+
+    <delete id="deleteAbUserAtlasByIds" parameterType="String">
+        delete from ab_user_atlas where user_id in 
+        <foreach item="userId" collection="array" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </delete>
+    
+</mapper>

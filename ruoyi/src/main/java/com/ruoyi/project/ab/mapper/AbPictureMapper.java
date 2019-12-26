@@ -17,7 +17,7 @@ public interface AbPictureMapper
      * @param id 图片ID
      * @return 图片
      */
-    public AbPicture selectAbPictureById(Long id);
+    public AbPicture selectAbPictureById(String id);
 
     /**
      * 查询图片列表

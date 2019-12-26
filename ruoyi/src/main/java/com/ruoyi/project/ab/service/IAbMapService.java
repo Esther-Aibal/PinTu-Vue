@@ -58,4 +58,6 @@ public interface IAbMapService
      * @return 结果
      */
     public int deleteAbMapById(String id);
+
+    public int review(String id);
 }

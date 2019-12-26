@@ -1,6 +1,8 @@
 package com.ruoyi.project.ab.controller;
 
 import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -63,7 +65,7 @@ public class AbPictureController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('ab:picture:query')")
     @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Long id)
+    public AjaxResult getInfo(@PathVariable("id") String id)
     {
         return AjaxResult.success(abPictureService.selectAbPictureById(id));
     }
@@ -99,5 +101,15 @@ public class AbPictureController extends BaseController
     public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(abPictureService.deleteAbPictureByIds(ids));
+    }
+
+    /**
+     * 审核通过
+     */
+    @PreAuthorize("@ss.hasPermi('ab:picture:edit')")
+    @PostMapping("/review")
+    public AjaxResult review(@Param("id") String id)
+    {
+        return toAjax(abPictureService.review(id));
     }
 }

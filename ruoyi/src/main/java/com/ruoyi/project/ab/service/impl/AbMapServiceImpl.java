@@ -93,4 +93,13 @@ public class AbMapServiceImpl implements IAbMapService
     {
         return abMapMapper.deleteAbMapById(id);
     }
+
+    @Override
+    public int review(String id) {
+       AbMap abMap = abMapMapper.selectAbMapById(id);
+       if(abMap.getStatus() ==0){
+           abMap.setStatus(1);
+       }
+        return abMapMapper.updateAbMap(abMap);
+    }
 }

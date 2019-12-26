@@ -103,6 +103,13 @@
             @click="handleDelete(scope.row)"
             v-hasPermi="['ab:map:remove']"
           >删除</el-button>
+          <el-button v-show="scope.row.status ==0"
+                     size="mini"
+                     type="text"
+                     icon="el-icon-view"
+                     @click="handleReview(scope.row)"
+                     v-hasPermi="['ab:picture:edit']"
+          >审核</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -137,14 +144,13 @@
           <el-input v-model="form.name" placeholder="请输入名称" />
         </el-form-item>
         <el-form-item label="图集类型">
-          <el-select v-model="form.type" placeholder="请选择图集类型">
-            <el-option
+          <el-radio-group v-model="form.type" placeholder="请选择图集类型">
+            <el-radio
               v-for="dict in mapTypeOptions"
               :key="dict.dictValue"
-              :label="dict.dictLabel"
-              :value="dict.dictValue"
-            />
-          </el-select>
+              :label="dict.dictValue"
+            >{{dict.dictLabel}}</el-radio>
+          </el-radio-group>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -156,7 +162,7 @@
 </template>
 
 <script>
-import { listMap, getMap, delMap, addMap, updateMap, exportMap } from "@/api/ab/map";
+import { listMap, getMap, delMap, addMap,review, updateMap, exportMap } from "@/api/ab/map";
 import { getToken } from '@/utils/auth'
 export default {
   data() {
@@ -223,7 +229,7 @@ export default {
     },
     // 字典状态字典翻译
     mapTypeFormat(row, column) {
-      return this.selectDictLabel(this.mapTypeOptions, row.status);
+      return this.selectDictLabel(this.mapTypeOptions, row.type);
     },
     // 取消按钮
     cancel() {
@@ -319,6 +325,20 @@ export default {
           this.getList();
           this.msgSuccess("删除成功");
         }).catch(function() {});
+    },
+    /** 审核按钮操作 */
+    handleReview(row) {
+      const id = row.id;
+      this.$confirm('是否确认通过审核?', "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(function() {
+        return review(id);
+      }).then(() => {
+        this.getList();
+        this.msgSuccess("审核成功");
+      }).catch(function() {});
     },
     /** 导出按钮操作 */
     handleExport() {

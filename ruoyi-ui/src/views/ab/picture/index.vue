@@ -1,27 +1,32 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
-      <el-form-item label="图集id" prop="atlasId">
-        <el-input
-          v-model="queryParams.atlasId"
-          placeholder="请输入图集id"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
+      <el-form-item label="所属图集" prop="atlasId">
+        <el-select v-model="queryParams.atlasId" placeholder="请选择图集" clearable size="small">
+          <el-option
+            v-for="map in atlasOptions"
+            :key="map.id"
+            :label="map.name"
+            :value="map.id"
+          />
+        </el-select>
       </el-form-item>
-      <el-form-item label="${column.columnComment}" prop="name">
+      <el-form-item label="图片名称" prop="name">
         <el-input
           v-model="queryParams.name"
-          placeholder="请输入${column.columnComment}"
+          placeholder="请输入名称"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-        <el-form-item label="${column.columnComment}" prop="status">
-        <el-select v-model="queryParams.status" placeholder="请选择${column.columnComment}" clearable size="small">
-          <el-option label="请选择字典生成" value="" />
+        <el-form-item label="状态" prop="status">
+        <el-select v-model="queryParams.status" placeholder="请选择状态" clearable size="small">
+          <el-option v-for="dict in abStatusOptions"
+                     :key="dict.dictValue"
+                     :label="dict.dictLabel"
+                     :value="dict.dictValue"
+          />
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -73,11 +78,10 @@
 
     <el-table v-loading="loading" :data="pictureList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="${column.columnComment}" align="center" prop="id" />
-      <el-table-column label="图集id" align="center" prop="atlasId" />
+      <el-table-column label="图片名称" align="center" prop="name" />
+      <el-table-column label="所属图集" align="center" prop="atlasId" :formatter="atlasFormat" />
       <el-table-column label="行列单元格数" align="center" prop="blockNum" />
-      <el-table-column label="${column.columnComment}" align="center" prop="name" />
-      <el-table-column label="${column.columnComment}" align="center" prop="status" />
+      <el-table-column label="状态" align="center" prop="status" :formatter="statusFormat"  />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -94,10 +98,17 @@
             @click="handleDelete(scope.row)"
             v-hasPermi="['ab:picture:remove']"
           >删除</el-button>
+          <el-button v-show="scope.row.status ==0"
+            size="mini"
+            type="text"
+            icon="el-icon-view"
+            @click="handleReview(scope.row)"
+            v-hasPermi="['ab:picture:edit']"
+          >审核</el-button>
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -109,28 +120,38 @@
     <!-- 添加或修改图片对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="图片地址" prop="imgUrl">
-          <el-input v-model="form.imgUrl" placeholder="请输入图片地址" />
+        <el-form-item label="图片名称" prop="name">
+          <el-input v-model="form.name" placeholder="请输入" />
         </el-form-item>
-        <el-form-item label="图集id" prop="atlasId">
-          <el-input v-model="form.atlasId" placeholder="请输入图集id" />
+        <el-form-item label="所属图集" prop="atlasId">
+          <el-select v-model="form.atlasId" placeholder="请选择" clearable size="small">
+            <el-option
+              v-for="atlas in atlasOptions"
+              :key="atlas.name"
+              :label="atlas.name"
+              :value="atlas.id"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item label="行列单元格数" prop="blockNum">
           <el-input v-model="form.blockNum" placeholder="请输入行列单元格数" />
         </el-form-item>
-        <el-form-item label="行列单元格数" prop="name">
-          <el-input v-model="form.name" placeholder="请输入行列单元格数" />
+        <el-form-item label="图片地址" prop="imgUrl">
+          <img v-bind:src="form.imgUrl" class="img-circle img-lg" />
+          <el-upload :show-file-list="false"
+                     :before-upload="beforeUpload"
+                     :action="uploadImgUrl"
+                     name="file"
+                     :headers="headers"
+                     :on-success="quillImgSuccess">
+            <el-button size="small">
+              上传
+              <i class="el-icon-upload el-icon--right"></i>
+            </el-button>
+          </el-upload>
         </el-form-item>
         <el-form-item label="需选择单元格数组" prop="chooseArray">
           <el-input v-model="form.chooseArray" placeholder="请输入需选择单元格数组" />
-        </el-form-item>
-        <el-form-item label="需选择单元格数组">
-          <el-radio-group v-model="form.status">
-            <el-radio label="1">请选择字典生成</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="需选择单元格数组" prop="delFlag">
-          <el-input v-model="form.delFlag" placeholder="请输入需选择单元格数组" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -142,8 +163,8 @@
 </template>
 
 <script>
-import { listPicture, getPicture, delPicture, addPicture, updatePicture, exportPicture } from "@/api/ab/picture";
-
+import { listPicture, getPicture, delPicture, review, addPicture, updatePicture, exportPicture,getAtlasList } from "@/api/ab/picture";
+import { getToken } from '@/utils/auth'
 export default {
   data() {
     return {
@@ -173,17 +194,29 @@ export default {
       },
       // 表单参数
       form: {},
+      atlasOptions:{},
+      abStatusOptions:{},
       // 表单校验
       rules: {
         atlasId: [
-          { required: true, message: "图集id不能为空", trigger: "blur" }
+          { required: true, message: "所属图集不能为空", trigger: "blur" }
         ],        blockNum: [
           { required: true, message: "行列单元格数不能为空", trigger: "blur" }
-        ],      }
+        ],      },
+      uploadImgUrl: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
+      headers: {
+        Authorization: 'Bearer ' + getToken()
+      }
     };
   },
   created() {
     this.getList();
+    getAtlasList().then(response => {
+      this.atlasOptions =response.data;
+    });
+    this.getDicts("ab_status").then(response => {
+      this.abStatusOptions = response.data;
+    });
   },
   methods: {
     /** 查询图片列表 */
@@ -199,6 +232,22 @@ export default {
     cancel() {
       this.open = false;
       this.reset();
+    },
+    // 字典状态字典翻译
+    statusFormat(row, column) {
+      return this.selectDictLabel(this.abStatusOptions, row.status);
+    },
+    // 字典状态字典翻译
+    atlasFormat(row, column) {
+      console.log(row.atlasId);
+      var actions = [];
+      Object.keys(this.atlasOptions).map((key) => {
+        if (this.atlasOptions[key].id == ( row.atlasId)) {
+          actions.push(this.atlasOptions[key].name);
+          return actions.join('');
+        }
+      })
+      return actions.join('');
     },
     // 表单重置
     reset() {
@@ -292,6 +341,20 @@ export default {
           this.msgSuccess("删除成功");
         }).catch(function() {});
     },
+    /** 审核按钮操作 */
+    handleReview(row) {
+      const id = row.id;
+      this.$confirm('是否确认通过审核?', "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(function() {
+        return review(id);
+      }).then(() => {
+        this.getList();
+        this.msgSuccess("审核成功");
+      }).catch(function() {});
+    },
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams;
@@ -304,7 +367,31 @@ export default {
         }).then(response => {
           this.download(response.msg);
         }).catch(function() {});
-    }
+    },
+    // 上传预处理
+    beforeUpload(file) {
+      if (file.type.indexOf("image/") == -1) {
+        this.msgError("文件格式错误，请上传图片类型,如：JPG，PNG后缀的文件。");
+      } else {
+        //const reader = new FileReader();
+        //reader.readAsDataURL(file);
+        //reader.onload = () => {
+        //  this.form.imgUrl = reader.result;
+        //};
+      }
+    },
+    quillImgSuccess(res, file) {
+      // res为图片服务器返回的数据
+      // 如果上传成功
+      if (res.code == 200) {
+        // 获取光标所在位置
+        // 插入图片  res.url为服务器返回的图片地址
+        this.form.imgUrl =res.url;
+
+      } else {
+        this.$message.error("图片插入失败");
+      }
+    },
   }
 };
 </script>

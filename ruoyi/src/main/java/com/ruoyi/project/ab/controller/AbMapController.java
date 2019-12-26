@@ -3,6 +3,7 @@ package com.ruoyi.project.ab.controller;
 import java.util.List;
 
 import com.ruoyi.common.utils.IdUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -111,5 +112,15 @@ public class AbMapController extends BaseController
     public AjaxResult remove(@PathVariable String[] ids)
     {
         return toAjax(abMapService.deleteAbMapByIds(ids));
+    }
+
+    /**
+     * 审核通过
+     */
+    @PreAuthorize("@ss.hasPermi('ab:map:edit')")
+    @PostMapping("/review")
+    public AjaxResult review(@Param("id") String id)
+    {
+        return toAjax(abMapService.review(id));
     }
 }

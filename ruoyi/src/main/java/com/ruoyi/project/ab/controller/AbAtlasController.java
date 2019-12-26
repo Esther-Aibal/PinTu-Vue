@@ -1,6 +1,9 @@
 package com.ruoyi.project.ab.controller;
 
 import java.util.List;
+
+import com.ruoyi.common.utils.IdUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,6 +47,14 @@ public class AbAtlasController extends BaseController
         List<AbAtlas> list = abAtlasService.selectAbAtlasList(abAtlas);
         return getDataTable(list);
     }
+    @PreAuthorize("@ss.hasPermi('ab:atlas:list')")
+    @GetMapping("/all")
+    public AjaxResult all()
+    {
+        AbAtlas abAtlas = new AbAtlas();
+        List<AbAtlas> list = abAtlasService.selectAbAtlasList(abAtlas);
+        return AjaxResult.success(list);
+    }
 
     /**
      * 导出图集列表
@@ -76,6 +87,7 @@ public class AbAtlasController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody AbAtlas abAtlas)
     {
+        abAtlas.setId(IdUtils.fastUUID());
         return toAjax(abAtlasService.insertAbAtlas(abAtlas));
     }
 
@@ -99,5 +111,15 @@ public class AbAtlasController extends BaseController
     public AjaxResult remove(@PathVariable String[] ids)
     {
         return toAjax(abAtlasService.deleteAbAtlasByIds(ids));
+    }
+
+    /**
+     * 审核通过
+     */
+    @PreAuthorize("@ss.hasPermi('ab:atlas:edit')")
+    @PostMapping("/review")
+    public AjaxResult review(@Param("id") String id)
+    {
+        return toAjax(abAtlasService.review(id));
     }
 }

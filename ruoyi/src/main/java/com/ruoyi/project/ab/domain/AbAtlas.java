@@ -23,7 +23,7 @@ public class AbAtlas extends BaseEntity
 
     /** 图集id */
     @Excel(name = "图集id")
-    private Long mapId;
+    private String mapId;
 
     /** $column.columnComment */
     @Excel(name = "图集id")
@@ -31,14 +31,14 @@ public class AbAtlas extends BaseEntity
 
     /** $column.columnComment */
     @Excel(name = "图集id")
-    private Long status;
+    private Integer status;
 
     /** 图片总数 */
     @Excel(name = "图片总数")
-    private Long total;
+    private Integer total;
 
     /** $column.columnComment */
-    private Long delFlag;
+    private Integer delFlag;
 
     public void setId(String id) 
     {
@@ -58,16 +58,16 @@ public class AbAtlas extends BaseEntity
     {
         return imgUrl;
     }
-    public void setMapId(Long mapId) 
-    {
+
+    public String getMapId() {
+        return mapId;
+    }
+
+    public void setMapId(String mapId) {
         this.mapId = mapId;
     }
 
-    public Long getMapId() 
-    {
-        return mapId;
-    }
-    public void setName(String name) 
+    public void setName(String name)
     {
         this.name = name;
     }
@@ -76,32 +76,29 @@ public class AbAtlas extends BaseEntity
     {
         return name;
     }
-    public void setStatus(Long status) 
-    {
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
-    public Long getStatus() 
-    {
-        return status;
+    public Integer getTotal() {
+        return total;
     }
-    public void setTotal(Long total) 
-    {
+
+    public void setTotal(Integer total) {
         this.total = total;
     }
 
-    public Long getTotal() 
-    {
-        return total;
-    }
-    public void setDelFlag(Long delFlag) 
-    {
-        this.delFlag = delFlag;
+    public Integer getDelFlag() {
+        return delFlag;
     }
 
-    public Long getDelFlag() 
-    {
-        return delFlag;
+    public void setDelFlag(Integer delFlag) {
+        this.delFlag = delFlag;
     }
 
     @Override
