@@ -119,5 +119,5 @@ gen:
   # 表前缀（生成类名不会包含表前缀，多个用逗号分隔）
   tablePrefix: sys_
 wechat:
-  appId:
-  secret:
+  appId: wx93861585cf361490
+  secret: ecc562a981b1a1f26884014de87bc636
