@@ -29,6 +29,8 @@ public class RuoYiConfig
 
     /** 获取地址开关 */
     private static boolean addressEnabled;
+    /** 获取生产地址 */
+    private static String prodUrl;
 
     public String getName()
     {
@@ -95,7 +97,7 @@ public class RuoYiConfig
      */
     public static String getAvatarPath()
     {
-        return getProfile() + "/avatar";
+        return getProfile();
     }
 
     /**
@@ -103,7 +105,7 @@ public class RuoYiConfig
      */
     public static String getDownloadPath()
     {
-        return getProfile() + "/download/";
+        return getProfile();
     }
 
     /**
@@ -111,6 +113,14 @@ public class RuoYiConfig
      */
     public static String getUploadPath()
     {
-        return getProfile() + "/upload";
+        return getProfile() ;
+    }
+
+    public static String getProdUrl() {
+        return prodUrl;
+    }
+
+    public static void setProdUrl(String prodUrl) {
+        RuoYiConfig.prodUrl = prodUrl;
     }
 }

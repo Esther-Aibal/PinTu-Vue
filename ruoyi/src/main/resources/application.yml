@@ -4,19 +4,21 @@ ruoyi:
   name: RuoYi
   # 版本
   version: 2.0.0
+  #
+  prodUrl: https://pintu.aibal.top
   # 版权年份
   copyrightYear: 2019
   # 实例演示开关
   demoEnabled: true
   # 文件路径 示例（ Windows配置D:/ruoyi/uploadPath，Linux配置 /home/ruoyi/uploadPath）
-  profile: /home1/ruoyi/uploadPath
+  profile: /home1/pintu/uploadPath
   # 获取ip地址开关
   addressEnabled: true
 
 # 开发环境配置
 server:
   # 服务器的HTTP端口，默认为8080
-  port: 9999
+  port: 8222
   servlet:
     # 应用的访问路径
     context-path: /
@@ -60,7 +62,7 @@ spring:
     # 地址
     host: 47.99.84.82
     # 端口，默认为6379
-    port: 6379
+    port: 6699
     # 连接超时时间
     timeout: 10s
     lettuce:
@@ -73,6 +75,7 @@ spring:
         max-active: 8
         # #连接池最大阻塞等待时间（使用负值表示没有限制）
         max-wait: -1ms
+    password: 5327shuidiguo
 
 # token配置
 token:
