@@ -371,7 +371,7 @@ export default {
       if (res.code == 200) {
         // 获取光标所在位置
         // 插入图片  res.url为服务器返回的图片地址
-        this.form.imgUrl =res.url;
+        this.form.imgUrl =res.fileName;
 
       } else {
         this.$message.error("图片插入失败");

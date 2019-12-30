@@ -20,7 +20,7 @@ public class AbUserPicture extends BaseEntity
     private String userId;
 
     /** $column.columnComment */
-    private String picutreId;
+    private String pictureId;
 
     public void setUserId(String userId) 
     {
@@ -32,19 +32,19 @@ public class AbUserPicture extends BaseEntity
         return userId;
     }
 
-    public String getPicutreId() {
-        return picutreId;
+    public String getPictureId() {
+        return pictureId;
     }
 
-    public void setPicutreId(String picutreId) {
-        this.picutreId = picutreId;
+    public void setPictureId(String pictureId) {
+        this.pictureId = pictureId;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("userId", getUserId())
-            .append("picutreId", getPicutreId())
+            .append("pictureId", getPictureId())
             .append("createTime", getCreateTime())
             .toString();
     }

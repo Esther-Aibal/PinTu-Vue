@@ -6,12 +6,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <resultMap type="AbUserPicture" id="AbUserPictureResult">
         <result property="userId"    column="user_id"    />
-        <result property="picutreId"    column="picutre_id"    />
+        <result property="pictureId"    column="picture_id"    />
         <result property="createTime"    column="create_time"    />
     </resultMap>
 
     <sql id="selectAbUserPictureVo">
-        select user_id, picutre_id, create_time from ab_user_picture
+        select user_id, picture_id, create_time from ab_user_picture
     </sql>
 
     <select id="selectAbUserPictureList" parameterType="AbUserPicture" resultMap="AbUserPictureResult">
