@@ -23,9 +23,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="getAbUserAtlasListAboutUser" resultType="com.ruoyi.project.ab.domain.req.GameAtlas">
-        select au.unlocked_num unlockedNum,a.total,a.img_url imgUrl,a.id
+        select a.total,a.img_url imgUrl,a.id,a.cel,a.`row`
         from ab_atlas a
-        left join ab_user_atlas au on a.id=au.atlas_id and au.user_id =#{userId}
         where a.map_id=#{mapId} and a.status = 1
     </select>
     

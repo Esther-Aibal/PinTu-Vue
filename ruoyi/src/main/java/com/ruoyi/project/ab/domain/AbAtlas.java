@@ -40,6 +40,10 @@ public class AbAtlas extends BaseEntity
     /** $column.columnComment */
     private Integer delFlag;
 
+    private Integer row;
+
+    private Integer cel;
+
     public void setId(String id) 
     {
         this.id = id;
@@ -99,6 +103,22 @@ public class AbAtlas extends BaseEntity
 
     public void setDelFlag(Integer delFlag) {
         this.delFlag = delFlag;
+    }
+
+    public Integer getRow() {
+        return row;
+    }
+
+    public void setRow(Integer row) {
+        this.row = row;
+    }
+
+    public Integer getCel() {
+        return cel;
+    }
+
+    public void setCel(Integer cel) {
+        this.cel = cel;
     }
 
     @Override

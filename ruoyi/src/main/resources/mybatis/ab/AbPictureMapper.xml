@@ -17,10 +17,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createBy"    column="create_by"    />
         <result property="updateTime"    column="update_time"    />
         <result property="updateBy"    column="update_by"    />
+        <result property="serialNo" column="serial_no"/>
     </resultMap>
 
     <sql id="selectAbPictureVo">
-        select id, img_url, atlas_id, block_num, name, choose_array, status, del_flag, create_time, create_by, update_time, update_by from ab_picture
+        select id, img_url, atlas_id, block_num, name,serial_no, choose_array, status, del_flag, create_time, create_by, update_time, update_by from ab_picture
     </sql>
 
     <select id="selectAbPictureList" parameterType="AbPicture" resultMap="AbPictureResult">
@@ -51,6 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createBy != null  and createBy != ''">create_by,</if>
             <if test="updateTime != null ">update_time,</if>
             <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="serialNo != null">serial_no,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="imgUrl != null  and imgUrl != ''">#{imgUrl},</if>
@@ -64,6 +66,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createBy != null  and createBy != ''">#{createBy},</if>
             <if test="updateTime != null ">#{updateTime},</if>
             <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="serialNo != null">#{serialNo},</if>
          </trim>
     </insert>
 
@@ -81,6 +84,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
             <if test="updateTime != null ">update_time = #{updateTime},</if>
             <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="serialNo != null"> serial_no= #{serialNo},</if>
         </trim>
         where id = #{id}
     </update>

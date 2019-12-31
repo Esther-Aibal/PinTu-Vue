@@ -10,6 +10,10 @@ public class GameAtlas {
     private String imgUrl;
     private Integer unlockedNum;
     private Integer total;
+    private Integer[] blockArr;
+    private Integer row;
+
+    private Integer cel;
 
     public String getId() {
         return id;
@@ -41,5 +45,29 @@ public class GameAtlas {
 
     public void setTotal(Integer total) {
         this.total = total;
+    }
+
+    public Integer[] getBlockArr() {
+        return blockArr;
+    }
+
+    public void setBlockArr(Integer[] blockArr) {
+        this.blockArr = blockArr;
+    }
+
+    public Integer getRow() {
+        return row;
+    }
+
+    public void setRow(Integer row) {
+        this.row = row;
+    }
+
+    public Integer getCel() {
+        return cel;
+    }
+
+    public void setCel(Integer cel) {
+        this.cel = cel;
     }
 }

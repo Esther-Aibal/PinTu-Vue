@@ -80,6 +80,7 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="图片名称" align="center" prop="name" />
       <el-table-column label="所属图集" align="center" prop="atlasId" :formatter="atlasFormat" />
+      <el-table-column label="序号" align="center" prop="serialNo" />
       <el-table-column label="行列单元格数" align="center" prop="blockNum" />
       <el-table-column label="状态" align="center" prop="status" :formatter="statusFormat"  />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -133,6 +134,10 @@
             />
           </el-select>
         </el-form-item>
+        <el-form-item label="图片序号" prop="blockNum">
+          <el-input v-model="form.serialNo" placeholder="请输入图片序号" />
+        </el-form-item>
+
         <el-form-item label="行列单元格数" prop="blockNum">
           <el-input v-model="form.blockNum" placeholder="请输入行列单元格数" />
         </el-form-item>
@@ -200,9 +205,14 @@ export default {
       rules: {
         atlasId: [
           { required: true, message: "所属图集不能为空", trigger: "blur" }
-        ],        blockNum: [
+        ],
+        blockNum: [
           { required: true, message: "行列单元格数不能为空", trigger: "blur" }
-        ],      },
+        ],
+        serialNo: [
+          { required: true, message: "序号不能为空", trigger: "blur" }
+        ],
+      },
       uploadImgUrl: process.env.VUE_APP_BASE_API + "/common/upload", // 上传的图片服务器地址
       headers: {
         Authorization: 'Bearer ' + getToken()

@@ -27,7 +27,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="getAbUserPicutreListAboutUser" resultType="com.ruoyi.project.ab.domain.req.GamePicture">
-        select if(up.user_id is null,0,1) unLocked, p.img_url imgUrl
+        select if(up.user_id is null,0,1) unLocked, p.img_url imgUrl,p.serial_no serialNo
         from ab_picture p
         left join ab_user_picture up on up.user_id=#{userId} and up.picture_id=p.id
         where p.atlas_id=#{atlasId} and p.status=1

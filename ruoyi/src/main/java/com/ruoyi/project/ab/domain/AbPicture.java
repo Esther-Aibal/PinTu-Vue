@@ -43,6 +43,8 @@ public class AbPicture extends BaseEntity
     /** $column.columnComment */
     private Integer delFlag;
 
+    private Integer serialNo;//序号
+
     public void setId(Long id) 
     {
         this.id = id;
@@ -112,6 +114,14 @@ public class AbPicture extends BaseEntity
 
     public void setDelFlag(Integer delFlag) {
         this.delFlag = delFlag;
+    }
+
+    public Integer getSerialNo() {
+        return serialNo;
+    }
+
+    public void setSerialNo(Integer serialNo) {
+        this.serialNo = serialNo;
     }
 
     @Override

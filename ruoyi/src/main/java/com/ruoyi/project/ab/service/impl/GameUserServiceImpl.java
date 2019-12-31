@@ -53,6 +53,18 @@ public class GameUserServiceImpl implements IGameUserService {
     @Override
     public List<GameAtlas> getAtlasList(String code, String mapId) {
         List<GameAtlas> list = abUserAtlasMapper.getAbUserAtlasListAboutUser(code,mapId);
+        for(GameAtlas atlas :list){
+            int unLockNum = 0;
+            Integer[] arr = new Integer[atlas.getTotal()];
+            //获取用户是否解锁集合
+            List<GamePicture> pictures = abUserPictureMapper.getAbUserPicutreListAboutUser(code,atlas.getId());
+            for(GamePicture gamePicture :pictures){
+                arr[gamePicture.getSerialNo()] =gamePicture.getUnlocked();
+                unLockNum +=gamePicture.getUnlocked();
+            }
+            atlas.setUnlockedNum(unLockNum);
+            atlas.setBlockArr(arr);
+        }
         return list;
     }
 

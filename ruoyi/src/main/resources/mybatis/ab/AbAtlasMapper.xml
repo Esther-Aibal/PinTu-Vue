@@ -19,7 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectAbAtlasVo">
-        select id, img_url, map_id, name, status, total, del_flag, create_time, create_by, update_time, update_by from ab_atlas
+        select id, img_url, map_id, name, status, total,`row`,cel, del_flag, create_time, create_by, update_time, update_by from ab_atlas
     </sql>
 
     <select id="selectAbAtlasList" parameterType="AbAtlas" resultMap="AbAtlasResult">
@@ -50,6 +50,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createBy != null  and createBy != ''">create_by,</if>
             <if test="updateTime != null ">update_time,</if>
             <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="row != null">`row`,</if>
+            <if test="cel != null">cel,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null  and id != ''">#{id},</if>
@@ -63,6 +65,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createBy != null  and createBy != ''">#{createBy},</if>
             <if test="updateTime != null ">#{updateTime},</if>
             <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="row != null">#{row},</if>
+            <if test="cel != null">#{cel},</if>
          </trim>
     </insert>
 
@@ -79,6 +83,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
             <if test="updateTime != null ">update_time = #{updateTime},</if>
             <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="row != null">`row`=#{row},</if>
+            <if test="cel != null">cel=#{cel},</if>
         </trim>
         where id = #{id}
     </update>

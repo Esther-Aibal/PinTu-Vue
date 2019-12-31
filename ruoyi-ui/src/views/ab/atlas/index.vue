@@ -83,6 +83,8 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="所属地图" align="center" prop="mapId" :formatter="mapFormat"/>
       <el-table-column label="图集名称" align="center" prop="name"  />
+      <el-table-column label="行数" align="center" prop="row" />
+      <el-table-column label="列数" align="center" prop="cel" />
       <el-table-column label="图片总数" align="center" prop="total" />
       <el-table-column label="状态" align="center" prop="status" :formatter="statusFormat"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -149,6 +151,12 @@
             </el-button>
           </el-upload>
         </el-form-item>
+        <el-form-item label="行数" prop="total">
+          <el-input v-model="form.row" placeholder="请输入行数" />
+        </el-form-item>
+        <el-form-item label="列数" prop="total">
+          <el-input v-model="form.cel" placeholder="请输入列数" />
+        </el-form-item>
         <el-form-item label="图片总数" prop="total">
           <el-input v-model="form.total" placeholder="请输入图片总数" />
         </el-form-item>
@@ -203,6 +211,12 @@ export default {
         ],
         total: [
           { required: true, message: "总数不能为空", trigger: "blur" }
+        ],
+        row: [
+          { required: true, message: "行数不能为空", trigger: "blur" }
+        ],
+        cel: [
+          { required: true, message: "列数不能为空", trigger: "blur" }
         ],
         type: [
           { required: true, message: "所属地图不能为空", trigger: "blur" }
