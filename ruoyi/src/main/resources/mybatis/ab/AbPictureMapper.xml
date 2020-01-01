@@ -21,7 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectAbPictureVo">
-        select id, img_url, atlas_id, block_num, name,serial_no, choose_array, status, del_flag, create_time, create_by, update_time, update_by from ab_picture
+        select id, img_url, atlas_id, block_num,rgbs, name,serial_no, choose_array, status, del_flag, create_time, create_by, update_time, update_by from ab_picture
     </sql>
 
     <select id="selectAbPictureList" parameterType="AbPicture" resultMap="AbPictureResult">
@@ -30,6 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="atlasId != null "> and atlas_id = #{atlasId}</if>
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
             <if test="status != null "> and status = #{status}</if>
+            <if test="serialNo != null">and serial_no =#{serialNo}</if>
         </where>
     </select>
     
@@ -53,6 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null ">update_time,</if>
             <if test="updateBy != null  and updateBy != ''">update_by,</if>
             <if test="serialNo != null">serial_no,</if>
+            <if test="rgbs!= null"> rgbs,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="imgUrl != null  and imgUrl != ''">#{imgUrl},</if>
@@ -67,6 +69,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null ">#{updateTime},</if>
             <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
             <if test="serialNo != null">#{serialNo},</if>
+            <if test="rgbs!= null">#{rgbs},</if>
          </trim>
     </insert>
 
@@ -85,6 +88,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null ">update_time = #{updateTime},</if>
             <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
             <if test="serialNo != null"> serial_no= #{serialNo},</if>
+            <if test="rgbs!= null and rgbs!=''">rgbs = #{rgbs},</if>
         </trim>
         where id = #{id}
     </update>
@@ -98,6 +102,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
+    </delete>
+
+    <delete id="deleteAbPictureByAtlasId">
+         delete from ab_picture where atlas_id =#{atlasId}
     </delete>
     
 </mapper>

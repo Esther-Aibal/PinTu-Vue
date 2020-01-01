@@ -60,4 +60,6 @@ public interface IAbPictureService
     public int deleteAbPictureById(Long id);
 
     public int review(String id);
+
+    public AbPicture selectAbPictureByNo(Integer serialNo,String atlasId);
 }

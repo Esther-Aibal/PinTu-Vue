@@ -80,6 +80,11 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="图片名称" align="center" prop="name" />
       <el-table-column label="所属图集" align="center" prop="atlasId" :formatter="atlasFormat" />
+      <el-table-column label="图片" align="center" prop="imgUrl" >
+        <template slot-scope="scope">
+          <img :src="scope.row.imgUrl" alt="" style="width: 50px;height: 50px">
+        </template>
+      </el-table-column>
       <el-table-column label="序号" align="center" prop="serialNo" />
       <el-table-column label="行列单元格数" align="center" prop="blockNum" />
       <el-table-column label="状态" align="center" prop="status" :formatter="statusFormat"  />

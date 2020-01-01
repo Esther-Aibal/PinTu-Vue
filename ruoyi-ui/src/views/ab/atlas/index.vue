@@ -83,6 +83,11 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="所属地图" align="center" prop="mapId" :formatter="mapFormat"/>
       <el-table-column label="图集名称" align="center" prop="name"  />
+      <el-table-column label="图片" align="center" prop="imgUrl" >
+        <template slot-scope="scope">
+          <img :src="scope.row.imgUrl" alt="" style="width: 50px;height: 50px">
+        </template>
+      </el-table-column>
       <el-table-column label="行数" align="center" prop="row" />
       <el-table-column label="列数" align="center" prop="cel" />
       <el-table-column label="图片总数" align="center" prop="total" />
@@ -159,6 +164,12 @@
         </el-form-item>
         <el-form-item label="图片总数" prop="total">
           <el-input v-model="form.total" placeholder="请输入图片总数" />
+        </el-form-item>
+        <el-form-item label="自动生成" prop="autoGen">
+          <el-radio-group v-model="form.autoGen">
+            <el-radio label="0">否</el-radio>
+            <el-radio label="1">是</el-radio>
+          </el-radio-group>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

@@ -1,7 +1,12 @@
 package com.ruoyi.project.ab.service.impl;
 
+import java.awt.image.BufferedImage;
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.file.ImageUtils;
+import com.ruoyi.framework.config.RuoYiConfig;
+import com.ruoyi.project.ab.domain.AbPicture;
+import com.ruoyi.project.ab.mapper.AbPictureMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.project.ab.mapper.AbAtlasMapper;
@@ -19,6 +24,8 @@ public class AbAtlasServiceImpl implements IAbAtlasService
 {
     @Autowired
     private AbAtlasMapper abAtlasMapper;
+    @Autowired
+    private AbPictureMapper abPictureMapper;
 
     /**
      * 查询图集
@@ -54,7 +61,31 @@ public class AbAtlasServiceImpl implements IAbAtlasService
     public int insertAbAtlas(AbAtlas abAtlas)
     {
         abAtlas.setCreateTime(DateUtils.getNowDate());
-        return abAtlasMapper.insertAbAtlas(abAtlas);
+        abAtlasMapper.insertAbAtlas(abAtlas);
+        if(abAtlas.getAutoGen() == 1){
+            //根据图集图片生成子图
+            String filePath =RuoYiConfig.getDownloadPath() + abAtlas.getImgUrl().substring(abAtlas.getImgUrl().indexOf("profile") + 7);
+
+            List<String> list = ImageUtils.generate(filePath,abAtlas.getRow(),abAtlas.getCel());
+            //保存图片并
+
+            if(list.size()>0){
+                abPictureMapper.deleteAbPictureByAtlasId(abAtlas.getId());
+            }
+            for (int i = 0;i<list.size();i++) {
+                AbPicture abPicture = new AbPicture();
+                abPicture.setStatus(1);
+                abPicture.setAtlasId(abAtlas.getId());
+                abPicture.setSerialNo(i);
+                abPicture.setBlockNum(5);
+                abPicture.setImgUrl(list.get(i));
+                abPicture.setName(abAtlas.getName()+"-"+i);
+                abPicture.setRgbs(ImageUtils.draw(abPicture.getImgUrl(),abPicture.getBlockNum(),abPicture.getBlockNum()));
+                abPictureMapper.insertAbPicture(abPicture);
+            }
+        }
+
+        return 1;
     }
 
     /**
@@ -67,6 +98,28 @@ public class AbAtlasServiceImpl implements IAbAtlasService
     public int updateAbAtlas(AbAtlas abAtlas)
     {
         abAtlas.setUpdateTime(DateUtils.getNowDate());
+        if(abAtlas.getAutoGen() == 1){
+            //根据图集图片生成子图
+            String filePath =RuoYiConfig.getDownloadPath() + abAtlas.getImgUrl().substring(abAtlas.getImgUrl().indexOf("profile") + 7);
+
+            List<String> list = ImageUtils.generate(filePath,abAtlas.getRow(),abAtlas.getCel());
+            //保存图片并
+
+            if(list.size()>0){
+                abPictureMapper.deleteAbPictureByAtlasId(abAtlas.getId());
+            }
+            for (int i = 0;i<list.size();i++) {
+                AbPicture abPicture = new AbPicture();
+                abPicture.setStatus(1);
+                abPicture.setAtlasId(abAtlas.getId());
+                abPicture.setSerialNo(i);
+                abPicture.setBlockNum(5);
+                abPicture.setImgUrl(list.get(i));
+                abPicture.setName(abAtlas.getName()+"-"+i);
+                abPicture.setRgbs(ImageUtils.draw(abPicture.getImgUrl(),abPicture.getBlockNum(),abPicture.getBlockNum()));
+                abPictureMapper.insertAbPicture(abPicture);
+            }
+        }
         return abAtlasMapper.updateAbAtlas(abAtlas);
     }
 

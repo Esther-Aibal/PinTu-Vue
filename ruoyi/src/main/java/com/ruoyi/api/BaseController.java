@@ -37,10 +37,10 @@ public class BaseController {
         return AjaxResult.success(abMapService.selectAbMapList(abMap));
     }
 
-    @GetMapping("/pictureInfo/{id}")
+    @PostMapping("/pictureInfoByNo")
     @CrossOrigin
-    public AjaxResult pictureInfo(@PathVariable("id") String id ){
-        return AjaxResult.success(abPictureService.selectAbPictureById(id));
+    public AjaxResult pictureInfo(@RequestParam("serialNo") Integer serialNo,@RequestParam("atlasId") String atlasId){
+        return AjaxResult.success(abPictureService.selectAbPictureByNo(serialNo,atlasId));
     }
 
     @GetMapping("/show")

@@ -16,10 +16,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createBy"    column="create_by"    />
         <result property="updateTime"    column="update_time"    />
         <result property="updateBy"    column="update_by"    />
+        <result property="autoGen" column="auto_gen"/>
     </resultMap>
 
     <sql id="selectAbAtlasVo">
-        select id, img_url, map_id, name, status, total,`row`,cel, del_flag, create_time, create_by, update_time, update_by from ab_atlas
+        select id, img_url, map_id, name, status, auto_gen,total,`row`,cel, del_flag, create_time, create_by, update_time, update_by from ab_atlas
     </sql>
 
     <select id="selectAbAtlasList" parameterType="AbAtlas" resultMap="AbAtlasResult">
@@ -36,7 +37,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
         
-    <insert id="insertAbAtlas" parameterType="AbAtlas">
+    <insert id="insertAbAtlas" parameterType="AbAtlas" useGeneratedKeys="true" keyProperty="id" >
         insert into ab_atlas
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null  and id != ''">id,</if>
@@ -52,6 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null  and updateBy != ''">update_by,</if>
             <if test="row != null">`row`,</if>
             <if test="cel != null">cel,</if>
+            <if test="autoGen != null">auto_gen,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null  and id != ''">#{id},</if>
@@ -67,6 +69,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
             <if test="row != null">#{row},</if>
             <if test="cel != null">#{cel},</if>
+            <if test="autoGen != null">#{autoGen},</if>
          </trim>
     </insert>
 
@@ -85,6 +88,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
             <if test="row != null">`row`=#{row},</if>
             <if test="cel != null">cel=#{cel},</if>
+            <if test="autoGen != null">auto_gen = #{autoGen},</if>
         </trim>
         where id = #{id}
     </update>

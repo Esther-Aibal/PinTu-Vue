@@ -144,7 +144,7 @@ public class FileUploadUtils
         return desc;
     }
 
-    private static final String getPathFileName(String uploadDir, String fileName) throws IOException
+    public  static final String getPathFileName(String uploadDir, String fileName) throws IOException
     {
         int dirLastIndex = RuoYiConfig.getProfile().length() + 1;
         String currentDir = StringUtils.substring(uploadDir, dirLastIndex);
@@ -155,7 +155,7 @@ public class FileUploadUtils
     /**
      * 编码文件名
      */
-    private static final String encodingFilename(String fileName)
+    public static final String encodingFilename(String fileName)
     {
         fileName = fileName.replace("_", " ");
         fileName = Md5Utils.hash(fileName + System.nanoTime() + counter++);

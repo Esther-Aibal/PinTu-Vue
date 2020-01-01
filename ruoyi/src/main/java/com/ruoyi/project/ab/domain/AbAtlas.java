@@ -44,6 +44,8 @@ public class AbAtlas extends BaseEntity
 
     private Integer cel;
 
+    private Integer autoGen;
+
     public void setId(String id) 
     {
         this.id = id;
@@ -119,6 +121,14 @@ public class AbAtlas extends BaseEntity
 
     public void setCel(Integer cel) {
         this.cel = cel;
+    }
+
+    public Integer getAutoGen() {
+        return autoGen;
+    }
+
+    public void setAutoGen(Integer autoGen) {
+        this.autoGen = autoGen;
     }
 
     @Override

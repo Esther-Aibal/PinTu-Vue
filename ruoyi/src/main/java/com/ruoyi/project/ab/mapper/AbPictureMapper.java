@@ -1,6 +1,8 @@
 package com.ruoyi.project.ab.mapper;
 
 import com.ruoyi.project.ab.domain.AbPicture;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 /**
@@ -58,4 +60,6 @@ public interface AbPictureMapper
      * @return 结果
      */
     public int deleteAbPictureByIds(Long[] ids);
+
+    public int deleteAbPictureByAtlasId(@Param("atlasId") String atlasId);
 }

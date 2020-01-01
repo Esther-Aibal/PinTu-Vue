@@ -27,7 +27,7 @@ public class AbPicture extends BaseEntity
 
     /** 行列单元格数 */
     @Excel(name = "行列单元格数")
-    private Long blockNum;
+    private Integer blockNum;
 
     /** $column.columnComment */
     @Excel(name = "行列单元格数")
@@ -44,6 +44,8 @@ public class AbPicture extends BaseEntity
     private Integer delFlag;
 
     private Integer serialNo;//序号
+
+    private String rgbs;//颜色集合
 
     public void setId(Long id) 
     {
@@ -72,16 +74,15 @@ public class AbPicture extends BaseEntity
         this.atlasId = atlasId;
     }
 
-    public void setBlockNum(Long blockNum)
-    {
+    public Integer getBlockNum() {
+        return blockNum;
+    }
+
+    public void setBlockNum(Integer blockNum) {
         this.blockNum = blockNum;
     }
 
-    public Long getBlockNum() 
-    {
-        return blockNum;
-    }
-    public void setName(String name) 
+    public void setName(String name)
     {
         this.name = name;
     }
@@ -122,6 +123,14 @@ public class AbPicture extends BaseEntity
 
     public void setSerialNo(Integer serialNo) {
         this.serialNo = serialNo;
+    }
+
+    public String getRgbs() {
+        return rgbs;
+    }
+
+    public void setRgbs(String rgbs) {
+        this.rgbs = rgbs;
     }
 
     @Override

@@ -2,6 +2,9 @@ package com.ruoyi.project.ab.service.impl;
 
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.file.ImageUtils;
+import com.ruoyi.framework.config.RuoYiConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.project.ab.mapper.AbPictureMapper;
@@ -27,9 +30,21 @@ public class AbPictureServiceImpl implements IAbPictureService
      * @return 图片
      */
     @Override
-    public AbPicture selectAbPictureById(String id)
-    {
+    public AbPicture selectAbPictureById(String id){
         return abPictureMapper.selectAbPictureById(id);
+    }
+    @Override
+    public AbPicture selectAbPictureByNo(Integer serialNo,String atlasId)
+    {
+        AbPicture abPicture = new AbPicture();
+        abPicture.setSerialNo(serialNo);
+        abPicture.setAtlasId(atlasId);
+        abPicture.setStatus(1);
+        List<AbPicture> list = abPictureMapper.selectAbPictureList(abPicture);
+        if(list.size() == 0){
+            return null;
+        }
+        return list.get(0);
     }
 
     /**
@@ -54,6 +69,13 @@ public class AbPictureServiceImpl implements IAbPictureService
     public int insertAbPicture(AbPicture abPicture)
     {
         abPicture.setCreateTime(DateUtils.getNowDate());
+        if(StringUtils.isNotEmpty(abPicture.getImgUrl())){
+            //图片分块处理
+            String filePath =RuoYiConfig.getDownloadPath() + abPicture.getImgUrl().substring(abPicture.getImgUrl().indexOf("profile") + 7);
+            String rgbList = ImageUtils.draw(filePath,abPicture.getBlockNum(),abPicture.getBlockNum());
+            abPicture.setRgbs(rgbList);
+        }
+
         return abPictureMapper.insertAbPicture(abPicture);
     }
 
@@ -67,6 +89,12 @@ public class AbPictureServiceImpl implements IAbPictureService
     public int updateAbPicture(AbPicture abPicture)
     {
         abPicture.setUpdateTime(DateUtils.getNowDate());
+        if(StringUtils.isNotEmpty(abPicture.getImgUrl())){
+            //图片分块处理
+            String filePath =RuoYiConfig.getDownloadPath() + abPicture.getImgUrl().substring(abPicture.getImgUrl().indexOf("profile") + 7);
+            String rgbList = ImageUtils.draw(filePath,abPicture.getBlockNum(),abPicture.getBlockNum());
+            abPicture.setRgbs(rgbList);
+        }
         return abPictureMapper.updateAbPicture(abPicture);
     }
 
