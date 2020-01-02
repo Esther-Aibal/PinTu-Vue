@@ -25,8 +25,9 @@ public class ImageUtils {
         //ImageUtils.draw("1");
     }
 
-    public static String draw(String filePath, int row,int cel){
-        //filePath = "/home1/pintu/uploadPath/2019/12/27/3b35c95a5d2e21b73582570da15b6261.jpg";//RuoYiConfig.getDownloadPath() + fileName.substring(fileName.indexOf("profile") + 7);
+    public static String draw(String fileName, int row,int cel){
+        //filePath = "/home1/pintu/uploadPath/2019/12/27/3b35c95a5d2e21b73582570da15b6261.jpg";
+        String filePath =RuoYiConfig.getDownloadPath() + fileName.substring(fileName.indexOf("profile") + 7);
         File file = new File(filePath);
         //获取图片存放路径
         if (file.exists()) {
