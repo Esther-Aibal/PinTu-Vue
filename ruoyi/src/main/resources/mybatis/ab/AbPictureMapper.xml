@@ -34,7 +34,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
     
-    <select id="selectAbPictureById" parameterType="String" resultMap="AbPictureResult">
+    <select id="selectAbPictureById" parameterType="Long" resultMap="AbPictureResult">
         <include refid="selectAbPictureVo"/>
         where id = #{id}
     </select>

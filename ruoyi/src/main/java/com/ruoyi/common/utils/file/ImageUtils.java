@@ -25,7 +25,7 @@ public class ImageUtils {
         //ImageUtils.draw("1");
     }
 
-    public static String draw(String fileName, int row,int cel){
+    public static Map<String,String> draw(String fileName, int row,int cel){
         //filePath = "/home1/pintu/uploadPath/2019/12/27/3b35c95a5d2e21b73582570da15b6261.jpg";
         String filePath =RuoYiConfig.getDownloadPath() + fileName.substring(fileName.indexOf("profile") + 7);
         File file = new File(filePath);
@@ -49,8 +49,10 @@ public class ImageUtils {
 
     }
 
-    public static String cutImageToBase64AboutColor(File sourceFile, int row,int cel) {
+    public static Map<String,String> cutImageToBase64AboutColor(File sourceFile, int row,int cel) {
+        Map map = new HashMap<>();
         String lettersCommaSeparated = null;
+        String choosArray = null;
         try {
             BufferedImage source = ImageIO.read(sourceFile);
             int width = source.getWidth(); // 图片宽度
@@ -59,6 +61,7 @@ public class ImageUtils {
             int cHeight = height/row; // 切片高度
             BufferedImage image = null;
             List<String> list = new ArrayList<>();
+            List<String> chooseList = new ArrayList<>();
             for (int i = row-1; i >=0; i--) {
                 for(int j= 0;j<cel;j++){
                     // x坐标,y坐标,宽度,高度
@@ -98,16 +101,19 @@ public class ImageUtils {
                     byte[] bytes = baos.toByteArray();
                     System.out.println("data:image/jpeg;base64,"+encoder.encodeBuffer(bytes));
                     baos.close();
+                    chooseList.add(pixel == 0?"0":"1");
                 }
 
             }
             lettersCommaSeparated= String.join(",", list);
-
+            choosArray = String.join(",",chooseList);
+            map.put("lettersCommaSeparated",lettersCommaSeparated);
+            map.put("choosArray",choosArray);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return lettersCommaSeparated;
+        return map;
     }
 
     public static List<String> cutImageToBase64(File sourceFile, int row,int cel) {

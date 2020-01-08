@@ -1,15 +1,10 @@
 package com.ruoyi.project.ab.service.impl;
 
-import com.ruoyi.project.ab.domain.AbPicture;
-import com.ruoyi.project.ab.domain.AbUser;
-import com.ruoyi.project.ab.domain.AbUserAtlas;
-import com.ruoyi.project.ab.domain.AbUserPicture;
+import com.ruoyi.project.ab.domain.*;
 import com.ruoyi.project.ab.domain.req.GameAtlas;
 import com.ruoyi.project.ab.domain.req.GamePicture;
 import com.ruoyi.project.ab.domain.req.GameUser;
-import com.ruoyi.project.ab.mapper.AbUserAtlasMapper;
-import com.ruoyi.project.ab.mapper.AbUserMapper;
-import com.ruoyi.project.ab.mapper.AbUserPictureMapper;
+import com.ruoyi.project.ab.mapper.*;
 import com.ruoyi.project.ab.service.IGameUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +24,11 @@ public class GameUserServiceImpl implements IGameUserService {
     private AbUserAtlasMapper abUserAtlasMapper;
     @Autowired
     private AbUserPictureMapper abUserPictureMapper;
+
+    @Autowired
+    private AbPictureMapper abPictureMapper;
+    @Autowired
+    private AbAtlasMapper abAtlasMapper;
 
 
     @Override
@@ -77,5 +77,28 @@ public class GameUserServiceImpl implements IGameUserService {
     public AbPicture getPictureAboutLock(String code, String atlasId) {
         List<AbPicture> list = abUserPictureMapper.selectLockedList(code,atlasId);
         return list.get(0);
+    }
+
+    @Override
+    public int insertUserPicture(String code, Long pictureId){
+        AbUserPicture abUserPicture = new AbUserPicture();
+        abUserPicture.setUserId(code);
+        abUserPicture.setPictureId(pictureId);
+        abUserPictureMapper.insertAbUserPicture(abUserPicture);
+        //根据图片获取图集
+        AbPicture abPicture = abPictureMapper.selectAbPictureById(pictureId);
+        AbAtlas abAtlas = abAtlasMapper.selectAbAtlasById(abPicture.getAtlasId());
+        AbUserPicture search = new AbUserPicture();
+        search.setUserId(code);
+        List<AbUserPicture> list = abUserPictureMapper.selectAbUserPictureList(search);
+        if(list.size() == abAtlas.getTotal()){
+            // 如果图集图片集成则通关
+            AbUserAtlas abUserAtlas = new AbUserAtlas();
+            abUserAtlas.setUserId(code);
+            abUserAtlas.setAtlasId(abAtlas.getId());
+            abUserAtlasMapper.insertAbUserAtlas(abUserAtlas);
+        }
+        return 1;
+
     }
 }

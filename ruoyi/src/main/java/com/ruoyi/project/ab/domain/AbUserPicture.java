@@ -20,7 +20,7 @@ public class AbUserPicture extends BaseEntity
     private String userId;
 
     /** $column.columnComment */
-    private String pictureId;
+    private Long pictureId;
 
     public void setUserId(String userId) 
     {
@@ -32,11 +32,11 @@ public class AbUserPicture extends BaseEntity
         return userId;
     }
 
-    public String getPictureId() {
+    public Long getPictureId() {
         return pictureId;
     }
 
-    public void setPictureId(String pictureId) {
+    public void setPictureId(Long pictureId) {
         this.pictureId = pictureId;
     }
 

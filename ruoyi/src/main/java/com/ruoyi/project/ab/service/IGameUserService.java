@@ -21,4 +21,6 @@ public interface IGameUserService {
 
     AbPicture getPictureAboutLock(String code, String atlasId);
 
+    int insertUserPicture(String code,Long pictureId);
+
 }

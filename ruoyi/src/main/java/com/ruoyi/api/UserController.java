@@ -81,5 +81,11 @@ public class UserController {
         return AjaxResult.success(gameUserService.getPictureAboutLock(code,atlasId));
     }
 
+    //用户胜利更新状态
+    @PostMapping("/winPicture")
+    @CrossOrigin
+    public AjaxResult winPicture(@RequestParam("pictureId") Long pictureId,@RequestParam("code") String code){
+        return AjaxResult.success(gameUserService.insertUserPicture(code,pictureId));
+    }
 
 }

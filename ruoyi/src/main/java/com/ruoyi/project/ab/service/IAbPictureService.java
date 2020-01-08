@@ -17,7 +17,7 @@ public interface IAbPictureService
      * @param id 图片ID
      * @return 图片
      */
-    public AbPicture selectAbPictureById(String id);
+    public AbPicture selectAbPictureById(Long id);
 
     /**
      * 查询图片列表
@@ -59,7 +59,7 @@ public interface IAbPictureService
      */
     public int deleteAbPictureById(Long id);
 
-    public int review(String id);
+    public int review(Long id);
 
     public AbPicture selectAbPictureByNo(Integer serialNo,String atlasId);
 }

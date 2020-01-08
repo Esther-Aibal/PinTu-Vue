@@ -2,6 +2,8 @@ package com.ruoyi.project.ab.service.impl;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
+import java.util.Map;
+
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.file.ImageUtils;
 import com.ruoyi.framework.config.RuoYiConfig;
@@ -80,7 +82,9 @@ public class AbAtlasServiceImpl implements IAbAtlasService
                 abPicture.setBlockNum(5);
                 abPicture.setImgUrl(list.get(i));
                 abPicture.setName(abAtlas.getName()+"-"+i);
-                abPicture.setRgbs(ImageUtils.draw(abPicture.getImgUrl(),abPicture.getBlockNum(),abPicture.getBlockNum()));
+                Map<String,String> map  =ImageUtils.draw(abPicture.getImgUrl(),abPicture.getBlockNum(),abPicture.getBlockNum());
+                abPicture.setRgbs(map.get("lettersCommaSeparated"));
+                abPicture.setChooseArray(map.get("choosArray"));
                 abPictureMapper.insertAbPicture(abPicture);
             }
         }
@@ -116,7 +120,9 @@ public class AbAtlasServiceImpl implements IAbAtlasService
                 abPicture.setBlockNum(5);
                 abPicture.setImgUrl(list.get(i));
                 abPicture.setName(abAtlas.getName()+"-"+i);
-                abPicture.setRgbs(ImageUtils.draw(abPicture.getImgUrl(),abPicture.getBlockNum(),abPicture.getBlockNum()));
+                Map<String,String> map  =ImageUtils.draw(abPicture.getImgUrl(),abPicture.getBlockNum(),abPicture.getBlockNum());
+                abPicture.setRgbs(map.get("lettersCommaSeparated"));
+                abPicture.setChooseArray(map.get("choosArray"));
                 abPictureMapper.insertAbPicture(abPicture);
             }
         }

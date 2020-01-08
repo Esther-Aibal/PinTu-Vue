@@ -1,6 +1,8 @@
 package com.ruoyi.project.ab.service.impl;
 
 import java.util.List;
+import java.util.Map;
+
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.file.ImageUtils;
@@ -30,7 +32,7 @@ public class AbPictureServiceImpl implements IAbPictureService
      * @return 图片
      */
     @Override
-    public AbPicture selectAbPictureById(String id){
+    public AbPicture selectAbPictureById(Long id){
         return abPictureMapper.selectAbPictureById(id);
     }
     @Override
@@ -71,9 +73,9 @@ public class AbPictureServiceImpl implements IAbPictureService
         abPicture.setCreateTime(DateUtils.getNowDate());
         if(StringUtils.isNotEmpty(abPicture.getImgUrl())){
             //图片分块处理
-            String filePath =RuoYiConfig.getDownloadPath() + abPicture.getImgUrl().substring(abPicture.getImgUrl().indexOf("profile") + 7);
-            String rgbList = ImageUtils.draw(filePath,abPicture.getBlockNum(),abPicture.getBlockNum());
-            abPicture.setRgbs(rgbList);
+            Map<String,String> map  =ImageUtils.draw(abPicture.getImgUrl(),abPicture.getBlockNum(),abPicture.getBlockNum());
+            abPicture.setRgbs(map.get("lettersCommaSeparated"));
+            abPicture.setChooseArray(map.get("choosArray"));
         }
 
         return abPictureMapper.insertAbPicture(abPicture);
@@ -91,9 +93,9 @@ public class AbPictureServiceImpl implements IAbPictureService
         abPicture.setUpdateTime(DateUtils.getNowDate());
         if(StringUtils.isNotEmpty(abPicture.getImgUrl())){
             //图片分块处理
-            String filePath =RuoYiConfig.getDownloadPath() + abPicture.getImgUrl().substring(abPicture.getImgUrl().indexOf("profile") + 7);
-            String rgbList = ImageUtils.draw(filePath,abPicture.getBlockNum(),abPicture.getBlockNum());
-            abPicture.setRgbs(rgbList);
+            Map<String,String> map  =ImageUtils.draw(abPicture.getImgUrl(),abPicture.getBlockNum(),abPicture.getBlockNum());
+            abPicture.setRgbs(map.get("lettersCommaSeparated"));
+            abPicture.setChooseArray(map.get("choosArray"));
         }
         return abPictureMapper.updateAbPicture(abPicture);
     }
@@ -123,7 +125,7 @@ public class AbPictureServiceImpl implements IAbPictureService
     }
 
     @Override
-    public int review(String id) {
+    public int review(Long id) {
         AbPicture abPicture = abPictureMapper.selectAbPictureById(id);
         if(abPicture.getStatus() ==0){
             abPicture.setStatus(1);

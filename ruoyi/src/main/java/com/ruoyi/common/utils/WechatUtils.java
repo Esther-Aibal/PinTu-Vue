@@ -17,8 +17,8 @@ public class WechatUtils {
     public static String getOpenId(String code){
         RestTemplate restTemplate=new RestTemplate();
         Map<String,String> params=new HashMap<>();
-        params.put("appid", WechatConfig.getAppId());  //
-        params.put("secret",WechatConfig.getSecret());
+        params.put("appid", "wx93861585cf361490");//WechatConfig.getAppId());  //
+        params.put("secret","ecc562a981b1a1f26884014de87bc636");//WechatConfig.getSecret());
         params.put("code",code);
         params.put("grant_type","authorization_code");
         //https://api.weixin.qq.com/sns/jscode2session?appid=wxe1ec741ded29e43b&secret=2c57a238fb1fcc4937ca5b1318e05df6&js_code=001w3ZgH0pUc6g2mm0eH0jRJgH0w3ZgE&grant_type=authorization_code

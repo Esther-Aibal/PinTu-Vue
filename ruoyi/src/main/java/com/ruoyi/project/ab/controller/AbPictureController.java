@@ -65,7 +65,7 @@ public class AbPictureController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('ab:picture:query')")
     @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") String id)
+    public AjaxResult getInfo(@PathVariable("id") Long id)
     {
         return AjaxResult.success(abPictureService.selectAbPictureById(id));
     }
@@ -108,7 +108,7 @@ public class AbPictureController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('ab:picture:edit')")
     @PostMapping("/review")
-    public AjaxResult review(@Param("id") String id)
+    public AjaxResult review(@Param("id") Long id)
     {
         return toAjax(abPictureService.review(id));
     }

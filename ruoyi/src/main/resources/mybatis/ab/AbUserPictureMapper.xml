@@ -44,12 +44,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into ab_user_picture
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="userId != null  and userId != ''">user_id,</if>
-            <if test="picutreId != null  and picutreId != ''">picutre_id,</if>
+            <if test="pictureId != null  and pictureId != ''">picture_id,</if>
             <if test="createTime != null ">create_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="userId != null  and userId != ''">#{userId},</if>
-            <if test="picutreId != null  and picutreId != ''">#{picutreId},</if>
+            <if test="pictureId != null  and pictureId != ''">#{pictureId},</if>
             <if test="createTime != null ">#{createTime},</if>
          </trim>
     </insert>
@@ -57,7 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateAbUserPicture" parameterType="AbUserPicture">
         update ab_user_picture
         <trim prefix="SET" suffixOverrides=",">
-            <if test="picutreId != null  and picutreId != ''">picutre_id = #{picutreId},</if>
+            <if test="pictureId != null  and pictureId != ''">picture_id = #{pictureId},</if>
             <if test="createTime != null ">create_time = #{createTime},</if>
         </trim>
         where user_id = #{userId}
